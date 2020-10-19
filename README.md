@@ -1,6 +1,8 @@
 # MindustryRPi
 Mindustry for RaspberryPi!
 
+The JAR file for the Raspberry Pi is inside Assets in the Releases section: https://github.com/azureblue/MindustryRPi/releases
+
 What is needed:
 - Raspberry Pi 4 (Rpi 3 not tested, but should work)
 - vc4 fake/full kms driver (dtoverlay=vc4-fkms-v3d or dtoverlay=vc4-kms-v3d in /boot/config.txt)
