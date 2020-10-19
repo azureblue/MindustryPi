@@ -1,5 +1,5 @@
 # MindustryRPi
-Mindustry for RaspberryPi!
+### [Mindustry](https://github.com/Anuken/Mindustry) for Raspberry Pi!
 
 The JAR file for the Raspberry Pi is inside Assets in the Releases section: https://github.com/azureblue/MindustryRPi/releases
 
