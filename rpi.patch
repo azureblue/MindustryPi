@@ -1,0 +1,35 @@
+diff --git a/core/src/mindustry/ui/dialogs/SettingsMenuDialog.java b/core/src/mindustry/ui/dialogs/SettingsMenuDialog.java
+index d58b930..df485ae 100644
+--- a/core/src/mindustry/ui/dialogs/SettingsMenuDialog.java
++++ b/core/src/mindustry/ui/dialogs/SettingsMenuDialog.java
+@@ -317,7 +317,7 @@ public class SettingsMenuDialog extends SettingsDialog{
+             }
+             return s + "%";
+         });
+-        graphics.sliderPref("fpscap", 240, 15, 245, 5, s -> (s > 240 ? Core.bundle.get("setting.fpscap.none") : Core.bundle.format("setting.fpscap.text", s)));
++        graphics.sliderPref("fpscap", 70, 15, 245, 5, s -> (s > 240 ? Core.bundle.get("setting.fpscap.none") : Core.bundle.format("setting.fpscap.text", s)));
+         graphics.sliderPref("chatopacity", 100, 0, 100, 5, s -> s + "%");
+         graphics.sliderPref("lasersopacity", 100, 0, 100, 5, s -> {
+             if(ui.settings != null){
+@@ -375,17 +375,10 @@ public class SettingsMenuDialog extends SettingsDialog{
+         graphics.checkPref("fps", false);
+         graphics.checkPref("playerindicators", true);
+         graphics.checkPref("indicators", true);
+-        graphics.checkPref("animatedwater", true);
+-        if(Shaders.shield != null){
+-            graphics.checkPref("animatedshields", !mobile);
+-        }
+-        if(!ios){
+-            graphics.checkPref("bloom", true, val -> renderer.toggleBloom(val));
+-        }else{
+-            Core.settings.put("bloom", false);
+-        }
+-
+-
++        
++        graphics.checkPref("animatedwater", false);
++        graphics.checkPref("animatedshields", false);
++        Core.settings.put("bloom", false);
+ 
+         graphics.checkPref("pixelate", false, val -> {
+             if(val){
