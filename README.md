@@ -1,10 +1,10 @@
 # MindustryRPi
-### [Mindustry](https://github.com/Anuken/Mindustry) for Raspberry Pi!
+### [Mindustry](https://github.com/Anuken/Mindustry) for Raspberry Pi (32 and 64 bit)!
 #### ...and probably other armv7 or aarch64
 
 The JAR file for the Raspberry Pi is inside Assets in the Releases section: https://github.com/azureblue/MindustryRPi/releases
 
-How to run: 
+How to run:
 #### java -jar MindustryPi.jar
 
 What is needed:
@@ -13,7 +13,6 @@ What is needed:
 - java (sudo apt install openjdk-11-jre)
 
 Raspberry Pi configuration:
-- vc4 fake/full kms driver (dtoverlay=vc4-fkms-v3d or dtoverlay=vc4-kms-v3d in /boot/config.txt)
+- vc4 full/fake kms driver (dtoverlay=vc4-kms-v3d or dtoverlay=vc4-fkms-v3d in /boot/config.txt)
 - proper gpu_mem setting (tested with 128mb)
-- recommended RPi overclocking (yet on your own responsibility :P) ;) 
-
+- recommended RPi overclocking (yet on your own responsibility :P) ;)
