@@ -10,7 +10,7 @@ How to run:
 What is needed:
 - SDL (sudo apt install libsdl2-2.0)
 - OpenAL (sudo apt install libopenal1, but probably you already have this one...)
-- java (sudo apt install openjdk-11-jre)
+- java (sudo apt install openjdk-11-jre or newer - can be 14 or even 17)
 
 Raspberry Pi configuration:
 - vc4 full/fake kms driver (dtoverlay=vc4-kms-v3d or dtoverlay=vc4-fkms-v3d in /boot/config.txt)
