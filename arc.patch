@@ -1,0 +1,152 @@
+diff -r Arc-c3e170325ca836f1939653ffbc01e76de9c6eb35/arc-core/build.gradle Arc/arc-core/build.gradle
+27c27,28
+<     add(Linux, x64){
+---
+>         
+>     add(Linux, false, true){
+32,55c33
+<     add(Windows, x32){
+<         cppIncludes += ["soloud/src/backend/miniaudio/*.cpp"]
+<         cppFlags = "-msse -DWITH_MINIAUDIO " + cppFlags
+<     }
+<     add(Windows, x64){
+<         cppIncludes += ["soloud/src/backend/miniaudio/*.cpp"]
+<         cppFlags = "-msse -DWITH_MINIAUDIO " + cppFlags
+<     }
+<     add(Android){
+<         linkerFlags += " -llog -lOpenSLES"
+<         cppIncludes += ["soloud/src/backend/miniaudio/*.cpp"]
+<         cppFlags = "-DWITH_MINIAUDIO " + cppFlags
+<     }
+<     add(MacOsX, x64){
+<         cppIncludes += ["soloud/src/backend/coreaudio/*.cpp"]
+<         cppFlags = "-std=c++11 -DWITH_COREAUDIO " + cppFlags
+<         libraries += "-Wl,-framework,CoreAudio -Wl,-framework,AudioToolbox"
+<     }
+<     add(IOS){
+<         headerDirs += ["iosgl"]
+<         cppExcludes = ["soloud/src/audiosource/ay/**"]
+<         cppIncludes += ["soloud/src/backend/coreaudio/*.cpp", "iosgl/**"]
+<         cppFlags = "-stdlib=libc++ -std=c++11 -DWITH_COREAUDIO " + cppFlags
+<     }
+---
+>    
+109c87
+<             from "libs/linux64", "libs/windows32", "libs/windows64", "libs/macosx64"
+---
+>             from "libs/linuxarm32", "libs/windows32", "libs/windows64", "libs/macosx64"
+133c111
+< jnigenBuild.finalizedBy postJni
+
+---
+> jnigenBuild.finalizedBy postJni
+diff -r Arc-c3e170325ca836f1939653ffbc01e76de9c6eb35/backends/backend-sdl/src/main/java/arc/backend/sdl/jni/SDL.java Arc/backends/backend-sdl/src/main/java/arc/backend/sdl/jni/SDL.java
+134,136c134
+<             new SharedLibraryLoader(){
+<                 @Override public String mapLibraryName(String libraryName){ return "lib" +libraryName + ".so"; }
+<             }.load("openal");
+---
+>             
+diff -r Arc-c3e170325ca836f1939653ffbc01e76de9c6eb35/backends/backend-sdl/src/test/java/NativesBuild.java Arc/backends/backend-sdl/src/test/java/NativesBuild.java
+26,36c26,27
+<         if(compileMac){
+<             BuildTarget mac64 = BuildTarget.newDefaultTarget(TargetOs.MacOsX, true);
+< 
+<             mac64.cIncludes = new String[]{};
+<             mac64.cFlags = mac64.cppFlags = execCmd("sdl2-config --cflags") + " -c -Wall -O2 -arch x86_64 -DFIXED_POINT -fmessage-length=0 -fPIC -mmacosx-version-min=10.9";
+<             mac64.linkerFlags = "-shared -arch x86_64 -mmacosx-version-min=10.9";
+<             mac64.libraries = macLibPath + " -lm -liconv -Wl,-framework,OpenAL -Wl,-framework,CoreAudio -Wl,-framework,OpenGL,-framework,AudioToolbox -Wl,-framework,ForceFeedback -lobjc -Wl,-framework,CoreVideo -Wl,-framework,Cocoa -Wl,-framework,Carbon -Wl,-framework,IOKit -Wl,-weak_framework,QuartzCore -Wl,-weak_framework,Metal" + libsMac;
+< 
+<             targets.add(mac64);
+<         }
+< 
+---
+>        
+>       
+38a30,31
+>            
+>             BuildTarget linarm = BuildTarget.newDefaultTarget(BuildTarget.TargetOs.Linux, OS.is64Bit, true);
+40,65c33
+<             BuildTarget lin64 = BuildTarget.newDefaultTarget(TargetOs.Linux, true);
+< 
+<             lin64.cIncludes = new String[]{};
+< 
+<             if(defined("dynamic")){
+<               lin64.cFlags = lin64.cFlags + " " + execCmd("pkg-config --cflags glew glu gl sdl2 openal");
+<               lin64.cppFlags = lin64.cFlags;
+<               lin64.linkerFlags = "-shared -m64" + " " + execCmd("pkg-config --libs glew glu gl sdl2 openal");
+<             }else{
+<               lin64.cppFlags =  lin64.cFlags = lin64.cFlags + " " + execCmd("sdl2-config --cflags");
+<               lin64.linkerFlags = "-shared -m64";
+<               lin64.libraries = execCmd("sdl2-config --static-libs").replace("-lSDL2", "-l:libSDL2.a") + libsLinux;
+<             }
+< 
+<             targets.add(lin64);
+<         }
+< 
+<         if(compileWindows){
+<             checkSDLVersion(win32crossCompilePath + "sdl2-config", minSDLversion);
+<             checkSDLVersion(win64crossCompilePath + "sdl2-config", minSDLversion);
+< 
+<             BuildTarget win32 = BuildTarget.newDefaultTarget(TargetOs.Windows, false);
+<             BuildTarget win64 = BuildTarget.newDefaultTarget(TargetOs.Windows, true);
+< 
+<             win32.cppFlags = win32.cFlags = win32.cFlags + " " + execCmd(win32crossCompilePath + "sdl2-config --cflags");
+<             win32.libraries = execCmd(win32crossCompilePath + "sdl2-config --static-libs") + libsWin;
+---
+>                 linarm.cIncludes = new String[]{};
+67,68c35,44
+<             win64.cppFlags = win64.cFlags = win64.cFlags + " " + execCmd(win64crossCompilePath + "sdl2-config --cflags");
+<             win64.libraries = execCmd(win64crossCompilePath + "sdl2-config --static-libs") + libsWin;
+---
+>     //		    if(defined("dynamic")){
+>                 linarm.cFlags = linarm.cFlags + " -march=armv8-a" + (OS.is64Bit ? "" : " -mfpu=neon-fp-armv8") + " -O2 " + execCmd("pkg-config --cflags glew glu gl sdl2 openal");
+>                 linarm.cppFlags = linarm.cFlags;
+>                 linarm.linkerFlags = "-shared" + " " + execCmd("pkg-config --libs glew glu gl sdl2 openal");
+>     //		    }else{
+>     //		      linarm.cppFlags =  linarm.cFlags = linarm.cFlags + " " + execCmd("sdl2-config --cflags");
+>     //		      linarm.linkerFlags = "-shared";
+>     //		      linarm.libraries = execCmd("sdl2-config --static-libs").replace("-lSDL2", "-l:libSDL2.a") + libsLinux;
+>     //	 	    }
+>             targets.add(linarm);
+70d45
+<             targets.add(win32, win64);
+71a47
+>      
+83c59
+<             String buildFileName = "build-" + target.os.toString().toLowerCase() + (target.is64Bit ? "64" : "32") + ".xml";
+---
+>             String buildFileName = "build-" + target.os.toString().toLowerCase() + "arm" + (target.is64Bit ? "64" : "32") + ".xml";
+89c65
+<                 exec("strip", "libs/" + target.os.name().toLowerCase() + (target.is64Bit ? "64" : "32") + "/" + target.libName);
+---
+>                 exec("strip", "libs/" + target.os.name().toLowerCase() + "arm" + (target.is64Bit ? "64" : "32") + "/" + target.libName);
+
+diff -r Arc-c3e170325ca836f1939653ffbc01e76de9c6eb35/extensions/freetype/build.gradle Arc/extensions/freetype/build.gradle
+67,72c67,69
+<             BuildTarget.newDefaultTarget(BuildTarget.TargetOs.Windows, false),
+<             BuildTarget.newDefaultTarget(BuildTarget.TargetOs.Windows, true),
+<             BuildTarget.newDefaultTarget(BuildTarget.TargetOs.Linux, true),
+<             BuildTarget.newDefaultTarget(BuildTarget.TargetOs.Android, false),
+<             BuildTarget.newDefaultTarget(BuildTarget.TargetOs.MacOsX, true),
+<             BuildTarget.newDefaultTarget(BuildTarget.TargetOs.IOS, false)
+---
+>            
+>             BuildTarget.newDefaultTarget(BuildTarget.TargetOs.Linux, false, true),
+>            
+79,82c76
+<             if(it.os == BuildTarget.TargetOs.MacOsX){
+<                 it.cppFlags = "-c -Wall -O2 -arch x86_64 -DFIXED_POINT -fmessage-length=0 -fPIC -mmacosx-version-min=10.7 -stdlib=libc++"
+<                 it.linkerFlags = "-shared -arch x86_64 -mmacosx-version-min=10.7 -stdlib=libc++ -framework CoreServices -framework Carbon"
+<             }
+---
+>             
+98c92
+<             if((target.os == BuildTarget.TargetOs.IOS || target.os == BuildTarget.TargetOs.MacOsX) != System.getProperty("os.name").toLowerCase().contains("mac")) continue
+---
+>             
+100c94
+<             String buildFileName = "build-" + target.os.toString().toLowerCase() + (target.is64Bit ? "64" : "32") + ".xml"
+---
+>             String buildFileName = "build-" + target.os.toString().toLowerCase() + "arm" + (target.is64Bit ? "64" : "32") + ".xml"
+
