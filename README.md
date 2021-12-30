@@ -8,6 +8,7 @@ How to run:
 #### java -jar MindustryPi.jar
 
 What is needed:
+- newest RaspberryPi OS (bullseye)
 - SDL (sudo apt install libsdl2-2.0)
 - OpenAL (sudo apt install libopenal1, but probably you already have this one...)
 - java (sudo apt install openjdk-11-jre or newer - can be 14 or even 17)
